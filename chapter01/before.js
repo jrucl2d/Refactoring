@@ -2,12 +2,16 @@ const invoices = require('./invoices.json')
 const plays = require('./plays.json')
 
 function statment(invoice, plays) {
-    const statementData = {};
-    statementData.customer = invoice.customer;
-    statementData.perfomances = invoice.perfomances.map(enrichPerformance);
-    statementData.totalAmount = totalAmount(statementData);
-    statementData.totalVolumeCredits = totalVolumeCredits(statementData);
-    return renderPlainText(statementData);
+    return renderPlainText(createStatementdata(invoice, plays));
+
+    function createStatementdata(invoice, plays) {
+        const statementData = {};
+        statementData.customer = invoice.customer;
+        statementData.perfomances = invoice.perfomances.map(enrichPerformance);
+        statementData.totalAmount = totalAmount(statementData);
+        statementData.totalVolumeCredits = totalVolumeCredits(statementData);
+        return statementData;
+    }
 
     function enrichPerformance(aPerformance) {
         const result = Object.assign({}, aPerformance); // 얕은 복사 수행
@@ -53,19 +57,13 @@ function statment(invoice, plays) {
     }
 
     function totalAmount(data) {
-        let result = 0;
-        for (let perf of data.perfomances) {
-            result += perf.amount;
-        }
-        return result;
+        return data.perfomances
+            .reduce((total, p) => total + p.amount, 0);
     }
     
     function totalVolumeCredits(data) {
-        let result = 0;
-        for (let perf of data.perfomances) {
-            result += perf.volumeCredits;
-        }
-        return result;
+        return data.perfomances
+            .reduce((total, p) => total + p.volumeCredits, 0);
     }
 }
 
