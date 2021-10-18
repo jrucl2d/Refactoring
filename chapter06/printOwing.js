@@ -3,16 +3,18 @@ function printOwing(invoice) {
 
     printBanner();
 
-    // 미해결 채무(outstanding)를 계산
+    // 미해결 채무(outstanding)를 계산`
     for (const o of invoice.orders) {
         outstanding += o.amount;
     }
 
-    // 마감일(dueDate)을 기록
+    recordDueDate(invoice);
+    printDetails(invoice, outstanding);
+}
+
+function recordDueDate(invoice) {
     const today = Clock.today;
     invoice.dueDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 30);
-
-    printDetails(invoice, outstanding);
 }
 
 function printDetails(invoice, outstanding) {
