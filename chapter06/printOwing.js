@@ -1,14 +1,16 @@
 function printOwing(invoice) {
     printBanner();
+    const outstanding = calculateOutstanding(invoice);
+    recordDueDate(invoice);
+    printDetails(invoice, outstanding);
+}
 
-    // 미해결 채무(outstanding)를 계산
-    let outstanding = 0;
+function calculateOutstanding(invoice) {
+    let outstanding = 0; // 추출할 코드 복사
     for (const o of invoice.orders) {
         outstanding += o.amount;
     }
-
-    recordDueDate(invoice);
-    printDetails(invoice, outstanding);
+    return outstanding; // 수정된 값 반환
 }
 
 function recordDueDate(invoice) {
