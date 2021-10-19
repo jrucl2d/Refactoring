@@ -9,11 +9,16 @@ class Person {
     }
 
     get courses() {
-        return this._courses;
+        return this._courses.slice();
     }
 
-    set courses(aList) {
-        this._courses = aList;
+    addCourse(aCourse) {
+        this._courses.push(aCourse);
+    }
+    removeCource(aCourse, fnIfAbsent = () => {throw new RangeError();}) {
+        const index = this._courses.indexOf(aCourse);
+        if (index === -1) fnIfAbsent();
+        else this._courses.splice(index, 1);
     }
 }
 
@@ -36,3 +41,7 @@ const numAdvancedCourses = aPerson.courses
     .filter(c => c.isAdvanced)
     .length
     ;
+
+for (const name of readBasicCourseNames(filename)) {
+    aPerson.addCourse(new Course("name", false));
+}
